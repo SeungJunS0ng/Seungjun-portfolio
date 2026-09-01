@@ -1,8 +1,12 @@
+import { useAppSelector } from '../app/hooks'
+
 export default function MyPage() {
-  return (
-    <div>
-      <h1>마이페이지</h1>
-      <p>프로필 및 설정</p>
-    </div>
-  )
+    const user = useAppSelector(state => state.auth.user)
+
+    return (
+        <>
+            <h1>My Page</h1>
+            <p>안녕하세요, {user?.email} 님</p>
+        </>
+    )
 }
