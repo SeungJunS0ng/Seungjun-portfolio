@@ -5,12 +5,22 @@ import Skills from '../pages/Skills'
 import Projects from '../pages/Projects'
 import Blog from '../pages/Blog'
 import BlogPost from '../pages/BlogPost'
+import Login from '../pages/Login'
+import MyPage from '../pages/MyPage'
+import AuthListener from './AuthListener'
+import ProtectedRoute from '../shared/ui/ProtectedRoute'
+import { useAppSelector } from './hooks'
+import { supabase } from '../shared/api/supabase'
 
 function App() {
+  const user = useAppSelector(state => state.auth.user)
+  const status = useAppSelector(state => state.auth.status)
   return (
     <div className={styles.app}>
+      <AuthListener />
+      
       <header>
-        <h1><li><Link to="/">SeungJun's Portfolio</Link></li></h1>
+        <h1><Link to="/">SeungJun's Portfolio</Link></h1>
 
         <nav>
           <ul className={styles.menus}>
@@ -23,12 +33,32 @@ function App() {
         </nav>
       </header>
 
+      <div>
+            {status === 'loading' ? null : user ? (
+              <>
+                <span>{user.email}</span>
+                <button onClick={() => supabase.auth.signOut()}>로그아웃</button>
+              </>
+            ) : (
+              <Link to='/login'>로그인</Link>
+            )}
+          </div>
+
       <Routes>
         <Route path="/" element={<About />} />
         <Route path="/skills" element={<Skills />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path='/login' element={<Login />} />
+        <Route
+          path='/mypage'
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
     </div>
