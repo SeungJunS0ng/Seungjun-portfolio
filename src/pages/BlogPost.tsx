@@ -1,5 +1,8 @@
 import { useParams } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -14,7 +17,12 @@ export default function BlogPost() {
   return (
     <div>
       <h2>Blog</h2>
-      <ReactMarkdown>{content}</ReactMarkdown>
+      <ReactMarkdown 
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+      >
+        {content}
+      </ReactMarkdown>
     </div>
   )
 }
